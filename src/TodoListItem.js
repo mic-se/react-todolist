@@ -35,8 +35,7 @@ class TodoListItem extends React.Component {
             type="button"
             className="ui button primary"
             onClick={this.onDeleteItem}>
-            {' '}
-            Delete{' '}
+            Delete
           </button>
         </td>
       </tr>

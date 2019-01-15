@@ -1,32 +1,22 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import TodoListItem from './TodoListItem';
 
+@inject('store')
+@observer
 class TodoList extends React.Component {
-  onChangeItem = (item) => {
-    const { onChangeItem } = this.props;
-    onChangeItem(item);
-  };
-
-  onDeleteItem = (name) => {
-    const { onDeleteItem } = this.props;
-    onDeleteItem(name);
-  };
-
   renderItems() {
-    const { items } = this.props;
+    const { store } = this.props;
+    const { items } = store;
+
     return items.map((item) => {
-      return (
-        <TodoListItem
-          key={item.name}
-          item={item}
-          onChangeItem={this.onChangeItem}
-          onDeleteItem={this.onDeleteItem}
-        />
-      );
+      return <TodoListItem key={item.id} item={item} />;
     });
   }
 
   render() {
+    const { store } = this.props;
+    const { countCompletedTasks, countTotalTasks } = store;
     return (
       <div>
         <h2>Todo List</h2>
@@ -41,6 +31,12 @@ class TodoList extends React.Component {
           </thead>
           <tbody>{this.renderItems()}</tbody>
         </table>
+
+        <span>
+          {countCompletedTasks}
+          /
+          {countTotalTasks}
+        </span>
       </div>
     );
   }

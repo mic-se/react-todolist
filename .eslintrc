@@ -27,6 +27,8 @@
         },
         "allowChildren": false
     }],
-    "react/jsx-closing-bracket-location": [0]
+    "react/jsx-closing-bracket-location": [0],
+    "no-plusplus": [0],
+    "guard-for-in": [0]
   }
 }

@@ -1,68 +1,42 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
+import Error from './Error';
 
+@inject('store')
+@observer
 class TodoCreate extends React.Component {
-  state = {
-    name: '',
-    content: '',
-    isDone: false,
-    error: ''
-  };
-
   handleSubmit = (e) => {
     e.preventDefault();
-    const { name, content } = this.state;
-    const { onError, onAddTodo } = this.props;
-
-    if (name === '' || content === '') {
-      this.setState(
-        {
-          error: 'empty field(s)'
-        },
-        () => {
-          return onError(this.state);
-        }
-      );
-      return;
-    }
-
-    onAddTodo(this.state);
+    const { store } = this.props;
+    const { addItem, addForm } = store;
+    addItem(addForm);
   };
 
   onChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    const { store } = this.props;
+    const { addForm } = store;
+    addForm[e.target.name] = e.target.value;
   };
 
   onClickCheckbox = (e) => {
-    this.setState({
-      isDone: e.target.checked
-    });
+    const { store } = this.props;
+    const { addForm } = store;
+    addForm.isDone = e.target.checked;
   };
 
   render() {
     return (
       <div>
         <h2>Add new todo</h2>
+        <Error />
         <form className="ui form" onSubmit={this.handleSubmit}>
           <div className="field">
             <label htmlFor="name">Name: </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={this.state.name}
-              onChange={this.onChange}
-            />
+            <input type="text" name="name" id="name" onChange={this.onChange} />
           </div>
           <div className="field">
             <label htmlFor="content">Content: </label>
-            <textarea
-              name="content"
-              id="content"
-              value={this.content}
-              onChange={this.onChange}
-            />
+            <textarea name="content" id="content" onChange={this.onChange} />
           </div>
           <div className="field">
             <div className="ui checkbox">

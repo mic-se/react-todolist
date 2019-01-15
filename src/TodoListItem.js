@@ -1,40 +1,43 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 
+@inject('store')
+@observer
 class TodoListItem extends React.Component {
-  onChangeDone = (e) => {
-    const { item, onChangeItem } = this.props;
-
-    const newValues = {
-      isDone: e.target.value
-    };
-    const merged = { ...item, ...newValues };
-    onChangeItem(merged);
-  };
-
-  onDeleteItem = () => {
-    const { item, onDeleteItem } = this.props;
-    onDeleteItem(item.name);
-  };
-
   render() {
-    const { item } = this.props;
+    const { item, store } = this.props;
+    const { removeItem } = store;
     return (
       <tr>
-        <td>{item.name}</td>
-        <td>{item.content}</td>
+        <td>
+          <input
+            type="text"
+            name="name"
+            value={item.name}
+            onChange={(e) => { (item.name = e.target.value); }}
+          />
+        </td>
+        <td>
+          <textarea
+            name="content"
+            onChange={(e) => { (item.content = e.target.value); }}
+            value={item.content}
+          />
+        </td>
         <td>
           <input
             type="checkbox"
             name="isDoneEdit"
             defaultChecked={item.isDone}
-            onChange={this.onChangeDone}
+            onChange={(e) => { (item.isDone = e.target.checked); }}
           />
         </td>
         <td>
           <button
             type="button"
             className="ui button primary"
-            onClick={this.onDeleteItem}>
+            onClick={() => { removeItem(item); }}
+          >
             Delete
           </button>
         </td>

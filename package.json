@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
-    "lint": "eslint ."
+    "build": "webpack",
+    "lint": "eslint .",
+    "format": "prettier-eslint --write src/*.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +15,11 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-proposal-decorators": "^7.2.3",
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "babel-polyfill": "^6.26.0",
@@ -34,9 +38,11 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
-    "@babel/runtime": "^7.2.0",
     "history": "^4.7.2",
+    "mobx": "^5.8.0",
+    "mobx-react": "^5.4.3",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "uuid": "^3.3.2"
   }
 }

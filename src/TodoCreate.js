@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import Error from './Error';
 
@@ -27,6 +28,9 @@ class TodoCreate extends React.Component {
   render() {
     return (
       <div>
+        <Link to="/">
+          <button type="button" className="ui button primary">List</button>
+        </Link>
         <h2>Add new todo</h2>
         <Error />
         <form className="ui form" onSubmit={this.handleSubmit}>

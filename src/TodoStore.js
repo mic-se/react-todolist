@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import uuid from 'uuid';
+import history from './history';
 
 class TodoStore {
   @observable items = [
@@ -23,7 +24,11 @@ class TodoStore {
     }
   ];
 
-  addForm = {};
+  addForm = {
+    name: '',
+    content: '',
+    isDone: ''
+  };
 
   @observable error = '';
 
@@ -36,7 +41,9 @@ class TodoStore {
       return;
     }
 
-    const found = this.items.find((element) => { return element.name === data.name; });
+    const found = this.items.find((element) => {
+      return element.name === data.name;
+    });
 
     if (found !== undefined) {
       this.error = 'name exists';
@@ -45,6 +52,7 @@ class TodoStore {
 
     data.id = uuid();
     this.items.push(data);
+    history.push('/');
   };
 
   @action

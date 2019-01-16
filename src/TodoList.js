@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import TodoListItem from './TodoListItem';
 
@@ -19,6 +20,9 @@ class TodoList extends React.Component {
     const { countCompletedTasks, countTotalTasks } = store;
     return (
       <div>
+        <Link to="/create">
+          <button type="button" className="ui button primary">Create</button>
+        </Link>
         <h2>Todo List</h2>
         <table className="ui fixed table">
           <thead>
@@ -34,7 +38,7 @@ class TodoList extends React.Component {
 
         <span>
           {countCompletedTasks}
-          /
+/
           {countTotalTasks}
         </span>
       </div>

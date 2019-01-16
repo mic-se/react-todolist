@@ -14,13 +14,17 @@ class TodoListItem extends React.Component {
             type="text"
             name="name"
             value={item.name}
-            onChange={(e) => { (item.name = e.target.value); }}
+            onChange={(e) => {
+              item.name = e.target.value;
+            }}
           />
         </td>
         <td>
           <textarea
             name="content"
-            onChange={(e) => { (item.content = e.target.value); }}
+            onChange={(e) => {
+              item.content = e.target.value;
+            }}
             value={item.content}
           />
         </td>
@@ -29,14 +33,18 @@ class TodoListItem extends React.Component {
             type="checkbox"
             name="isDoneEdit"
             defaultChecked={item.isDone}
-            onChange={(e) => { (item.isDone = e.target.checked); }}
+            onChange={(e) => {
+              item.isDone = e.target.checked;
+            }}
           />
         </td>
         <td>
           <button
             type="button"
             className="ui button primary"
-            onClick={() => { removeItem(item); }}
+            onClick={() => {
+              removeItem(item);
+            }}
           >
             Delete
           </button>

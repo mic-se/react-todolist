@@ -5,8 +5,9 @@ import { observer, inject } from 'mobx-react';
 @observer
 class Error extends React.Component {
   render() {
-    const { store } = this.props;
-    const { error } = store;
+    const {
+      store: { error }
+    } = this.props;
     return (
       <div>
         {error && (

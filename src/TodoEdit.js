@@ -1,25 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import Error from './Error';
 
 @inject('store')
 @observer
-class TodoCreate extends React.Component {
+class TodoEdit extends React.Component {
   componentDidMount() {
-    const { store: { resetForm, clearError } } = this.props;
+    const {
+      store: { loadItem, resetForm, clearError },
+      match: {
+        params: { id }
+      }
+    } = this.props;
+
     resetForm();
     clearError();
+    loadItem(id);
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const {
-      store: { addItem, form },
-      history
-    } = this.props;
 
-    addItem(form).then(() => {
+    const {
+      store: { editItem, form }
+    } = this.props;
+    editItem(form).then(() => {
+      const { history } = this.props;
       history.push('/');
     });
   };
@@ -36,7 +43,7 @@ class TodoCreate extends React.Component {
             List
           </button>
         </Link>
-        <h2>Add new todo</h2>
+        <h2>Edit todo</h2>
         <Error />
         <form className="ui form" onSubmit={this.handleSubmit}>
           <div className="field">
@@ -45,6 +52,7 @@ class TodoCreate extends React.Component {
               type="text"
               name="name"
               id="name"
+              value={form.name}
               onChange={(e) => {
                 form.name = e.target.value;
               }}
@@ -55,6 +63,7 @@ class TodoCreate extends React.Component {
             <textarea
               name="content"
               id="content"
+              value={form.content}
               onChange={(e) => {
                 form.content = e.target.value;
               }}
@@ -68,6 +77,7 @@ class TodoCreate extends React.Component {
                 onChange={(e) => {
                   form.isDone = e.target.checked;
                 }}
+                checked={form.isDone}
               />
               <label htmlFor="isDone">Done? </label>
             </div>
@@ -81,4 +91,4 @@ class TodoCreate extends React.Component {
   }
 }
 
-export default TodoCreate;
+export default TodoEdit;

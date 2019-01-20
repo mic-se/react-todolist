@@ -1,53 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 
 @inject('store')
 @observer
 class TodoListItem extends React.Component {
   render() {
-    const { item, store } = this.props;
-    const { removeItem } = store;
+    const {
+      item,
+      store: { removeItem }
+    } = this.props;
     return (
       <tr>
         <td>
-          <input
-            type="text"
-            name="name"
-            value={item.name}
-            onChange={(e) => {
-              item.name = e.target.value;
-            }}
-          />
+          <Link to={`/edit/${item._id}`}>
+            <i className="edit icon big" />
+          </Link>
         </td>
+        <td>{item.name}</td>
+        <td>{item.content}</td>
+        <td>{item.isDone ? <i className="check icon big" /> : <i className="x icon big" />}</td>
         <td>
-          <textarea
-            name="content"
-            onChange={(e) => {
-              item.content = e.target.value;
-            }}
-            value={item.content}
-          />
-        </td>
-        <td>
-          <input
-            type="checkbox"
-            name="isDoneEdit"
-            defaultChecked={item.isDone}
-            onChange={(e) => {
-              item.isDone = e.target.checked;
-            }}
-          />
-        </td>
-        <td>
-          <button
-            type="button"
-            className="ui button primary"
+          <span
             onClick={() => {
-              removeItem(item);
+              return removeItem(item);
             }}
           >
-            Delete
-          </button>
+            <i className="trash icon big" />
+          </span>
         </td>
       </tr>
     );

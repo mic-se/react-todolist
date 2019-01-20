@@ -1,88 +1,108 @@
 import { observable, action, computed } from 'mobx';
-import uuid from 'uuid';
-import history from './history';
+import api from './api';
 
 class TodoStore {
-  @observable items = [
-    {
-      id: uuid(),
-      name: 'test1',
-      content: 'test content1',
-      isDone: false
-    },
-    {
-      id: uuid(),
-      name: 'test2',
-      content: 'test content2',
-      isDone: true
-    },
-    {
-      id: uuid(),
-      name: 'test3',
-      content: 'test content23',
-      isDone: true
-    }
-  ];
+  @observable items = [];
 
-  addForm = {
+  @observable form = {
     name: '',
     content: '',
-    isDone: ''
+    isDone: 0
   };
 
   @observable error = '';
 
-  @action
-  addItem = (form) => {
-    const data = form;
-    this.error = '';
-    if (data.name === '' || data.content === '') {
-      this.error = 'empty field(s)';
-      return;
-    }
-
-    const found = this.items.find((element) => {
-      return element.name === data.name;
-    });
-
-    if (found !== undefined) {
-      this.error = 'name exists';
-      return;
-    }
-
-    data.id = uuid();
-    this.items.push(data);
-    history.push('/');
-  };
-
-  @action
-  removeItem = (item) => {
-    const { items } = this;
-    for (let i = items.length; i--;) {
-      if (items[i].name === item.name) {
-        items.splice(i, 1);
-      }
-    }
-  };
-
-  @computed
-  get countCompletedTasks() {
-    const { items } = this;
-    let completed = 0;
-    for (let i = items.length; i--;) {
-      if (items[i].isDone) {
-        completed++;
-      }
-    }
-
-    return completed;
+  @action resetForm = () => {
+    this.form = {
+      name: '',
+      content: '',
+      isDone: 0
+    };
   }
 
-  @computed
-  get countTotalTasks() {
+  @action clearError = () => {
+    this.error = '';
+  }
+
+  @action getItems = () => {
+    return api
+      .get('/')
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  @action getItem = (id) => {
+    return api
+      .get(`/${id}`)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  @action loadItems = () => {
+    this.getItems().then(({ data }) => {
+      this.items = data;
+    });
+  };
+
+  @action loadItem = (id) => {
+    this.getItem(id).then(({ data }) => {
+      this.form = data;
+    });
+  };
+
+  @action addItem = (item) => {
+    this.errors = '';
+    return api.post('/', item).catch((error) => {
+      if (error.response) {
+        this.error = error.response.data.message;
+      }
+
+      throw error;
+    });
+  };
+
+  @action editItem = (item) => {
+    this.errors = '';
+    return api.put(`/${item._id}`, item).catch((error) => {
+      if (error.response) {
+        this.error = error.response.data.message;
+      }
+
+      throw error;
+    });
+  };
+
+  @action removeItem = (item) => {
+    api
+      .delete(`/${item._id}`)
+      .then(() => {
+        const filteredItem = this.items.filter((elem) => {
+          return elem._id !== item._id;
+        });
+        this.items.replace(filteredItem);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  @computed get countCompletedTasks() {
+    return this.items.filter((item) => {
+      return item.isDone;
+    }).length;
+  }
+
+  @computed get countTotalTasks() {
     return this.items.length;
   }
 }
 
-const todoStore = new TodoStore();
-export default todoStore;
+export default new TodoStore();

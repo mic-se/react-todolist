@@ -1,14 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 import { Provider } from 'mobx-react';
 import App from './App';
 import todoStore from './TodoStore';
 
 ReactDOM.render(
   <Provider store={todoStore}>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </Provider>,
   document.querySelector('#root')
 );
 
-module.hot.accept();
+if (module.hot) {
+  module.hot.accept();
+}
